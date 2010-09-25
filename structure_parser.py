@@ -10,7 +10,7 @@ from card_interface import *
 
 from smartcard.util import toHexString
 from smartcard.ATR import ATR
-
+import types
 import exceptions
 
 
@@ -62,14 +62,16 @@ def parseTLV(data):
     table = {}
     keys = []
     while len(data) > 0:
-#        print data
-        type = data[0]
+        #        print data
+        cur_type = data[0]
         data = data[1:]
-        if type%32 == 31 and len(data)>0: #TODO : Vérifier 5 derniers bits à 1 =? multi byte tag
-            type = type*256 + data[0]
+        if cur_type%32 == 31 and len(data)>0: #TODO(e) : Vérifier 5
+                                          #derniers bits à 1 =? multi
+                                          #byte tag
+            cur_type = cur_type*256 + data[0]
             data = data[1:]
-            
-        if data[0] == 0x81 and len(data)>0: # TODO : Pourquoi ?
+
+        if data[0] == 0x81 and len(data)>0: # TODO(e): Pourquoi ?
             data = data[1:]
         try:
             length = data[0]
@@ -84,9 +86,9 @@ def parseTLV(data):
         except: #not TLV
             #print data
             raise notTLVRecord(data)
-        if not type in typeTable:
+        if not cur_type in typeTable:
             continue
-        info = typeTable[type]          # TODO : Faire une fonction interpret
+        info = typeTable[cur_type]          # TODO(e): Faire une fonction interpret
         name = info[0]
         interpreter = info[1]
         keys.append(name)
@@ -118,7 +120,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
         #print structure
         #print table
         #print ""
-    
+
         # TODO : maj total
         if structure == -1: #TLV !
             # TODO : Le faire sans bruteforce
@@ -134,7 +136,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         try:
                             entry[number] = parseTLV(cardData)
                         except notTLVRecord:
-                            ''''
+                            '''
                             interpretersTable = plugin.getInterpretersTable()
                             if "default" in plugin.getInterpretersTable():
                                 entry[number] = interpretersTable["default"](data)
@@ -151,20 +153,21 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 entry["Keys"] = subkeys
                 keys.append(fileCounter)
                 table[fileCounter] = entry
-       
+
 
 
         else:
             field = structure[0]
             name = field[0]
-            if type(name) == type([]):
+            if type(name) == types.ListType:
                 hiddenFields = True
             else:
                 hiddenFields = False
             structure = structure[1:]
-            
+
             if field[1] == FieldType.Bitmap:
-                if type(data) != type(""): # TODO : check si c'est bien des 0 et des 1
+                # TODO : check si c'est bien des 0 et des 1
+                if not (type(data) is types.StringType):
                     data = display.hexListToBinaryString(data)
                 length = field[2]
                 bitmap = data[0:length]
@@ -181,8 +184,8 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         raise IncorrectStructure
                     counter += 1
                 structure = subfields + structure
-                
-            
+
+
             elif field[1] == FieldType.FinalRepeated:
                 length = field[2]
                 datalen = len(data)
@@ -192,7 +195,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         break
                     subfields.append( ("%s %u" % (field[0], i+1), FieldType.Final, field[2], field[3], field[4]) )
                 structure = subfields + structure
-                
+
             elif field[1] == FieldType.StructRepeated:
                 #print data
                 length = field[2]
@@ -208,7 +211,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 data = [number] + data
                 structure = field + structure
                 #print structure
-               
+
             # TODO : regrouper avec le cas précédent ? faire un reverse d'autres cas ?
             elif field[1] == FieldType.ReversedStructRepeated:
                 length = field[2]
@@ -219,14 +222,11 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 data = newdata
                 #print data, newdata
                 structure = [(field[0], FieldType.StructRepeated, field[2], field[3])] + structure
-                
-                
+
+
             else:
                 if field[1] == FieldType.DF:
                     entry = parseCardStruct(connection, field[3], data+field[2])
-                    
-                    
-                    
                 elif field[1] == FieldType.DFName:
                     # TODO : Check error
                     selectFileByName(connection, field[2])
@@ -244,7 +244,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         entry[addr] = parseCardStruct(connection, field[3], [], sizeParsed, defaultStruct)
                     entry["Keys"] = subkeys
 
-                    
+
                 elif field[1] == FieldType.TransparentEF:
                     (response, sw1, sw2, size) = selectFile(connection, data+field[2])
                     # TODO : code d'erreur ?
@@ -257,8 +257,8 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     else:
                         hexdata, sw1, sw2 = readData(connection, size)
                         entry = parseCardStruct(connection, field[3], hexdata)
-                    
-                    
+
+
                 # TODO : Quand est-on en binaire ou en hexa ?
                 elif field[1] == FieldType.RecordEF:
                     (response, sw1, sw2, size) = selectFile(connection, data+field[2])
@@ -301,7 +301,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 elif field[1] == FieldType.Counter:
                     length = field[2]
                     # TODO : bof, faire une fonction qui virifie si c'est du binaire ?
-                    if type(data) == type(""):
+                    if type(data) is types.StringType:
                         counter = int(data[0:length], 2)
                     else:
                         counter = data[0] # TODO : data sur plusieurs octets
@@ -317,7 +317,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     entry["Keys"] = subkeys
                 elif field[1] == FieldType.Final:
                     length = field[2]
-                    if type(length)==type([]):
+                    if type(length) is types.ListType:
                         length = length[0]
                     if length != 0:
                         #print length
@@ -331,7 +331,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     #print value
                     interpretation = interpretFinalField(value, field[4], name)
                     # TODO : beurk
-                    if type(value) == type([]):
+                    if type(value) is types.ListType:
                         value = toHexString(value)
                     entry = display.formatOutput(interpretation, value, field[3])
 
@@ -344,7 +344,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 else:
                     table[name] = entry
                     keys.append(name)
-                    
+
     sizeParsed.append(total)
     table["Keys"] = keys
     #print table
