@@ -26,17 +26,15 @@ class UsageMode:
     Loop = 2
 
 def usage():
-    print "Usage: pssi [options] [plugin]"
+    print "Usage: pssi [options] plugin"
     for opt, desc in sorted(optionsList):
         print "\t%-10s%s" % (opt, desc)
     sys.exit(2)
 
 
 def main():
-    options = ""
-    for opt, dec in optionsList:
-        options += opt[1:]
-
+    # Build the list of options e.g. 'abdhlrv'.
+    options = ''.join([o[1:] for o, d in optionsList])
     try:
         opts, args = getopt.getopt(sys.argv[1:], options)
     except getopt.GetoptError, err:
@@ -44,8 +42,9 @@ def main():
         usage()
 
     mode = UsageMode.Dumper
-    
-    # TODO : Faire une option pour spécifier le CLASS BYTE en paramètre dans le cas d'un BF
+
+    # TODO(e): Faire une option pour spécifier le CLASS BYTE en
+    # paramètre dans le cas d'un BF
     for o, a in opts:
         if o == "-a":
             card_interface.apduMode = True
@@ -65,9 +64,9 @@ def main():
             assert False, "unhandled option: %s" % (o)
 
     if len(args) < 1:
-        # TODO : Should be a different error
+        # TODO(e): Should be a different error
         usage()
-        
+
     sys.path.append(args[0])
     import plugin
     card_interface.cla = plugin.getClassByte()
