@@ -21,15 +21,15 @@ def getReadersList():
         return readers()
     except (EstablishContextException):
         return []
-        
-        
+
+
 def transmitAPDU(connection, apdu):
     global apduMode
     response, sw1, sw2 = connection.transmit(apdu)
     if apduMode: display.printExchange(apdu, response, sw1, sw2)
     return response, sw1, sw2
-        
-        
+
+
 def sendAPDU(connection, apdu):
     response, sw1, sw2 = transmitAPDU(connection, apdu)
     if statusPinRequired(sw1, sw2):
@@ -40,17 +40,17 @@ def sendAPDU(connection, apdu):
             display.errorPIN()
         response, sw1, sw2 = transmitAPDU(connection, apdu)
     return response, sw1, sw2
-        
-        
+
+
 def warmResetNeeded(connection):
     global cla
     testAPDU = [cla,0,0,0]
     response, sw1, sw2 = sendAPDU(connection, testAPDU)
     if sw1 == 0x6e:
         return True
-    return False    
-        
-        
+    return False
+
+
 def establishConnection(connection):
     # disposition = 1 = SCARD_RESET_CARD (warm reset)
     connection.connect(disposition=1)
@@ -58,8 +58,8 @@ def establishConnection(connection):
         connection.disconnect()
         connection.connect()
         if apduMode: display.printExchange("reset", getATR(connection), 0x90, 0)
-        
-        
+
+
 def connectToCard(card):
     try:
         card.connection = card.createConnection()
@@ -68,8 +68,8 @@ def connectToCard(card):
         return True
     except  (NoCardException, CardConnectionException):
         return False
-        
-        
+
+
 def connectCard(reader):
     try:
         connection = reader.createConnection()
@@ -78,19 +78,19 @@ def connectCard(reader):
         return connection
     except  (NoCardException, CardConnectionException):
         return False
-        
+
 def getCard():
     reader = selectReader()
-    if not reader:
+    if reader is None:
         return False
     card = connectCard(reader)
     if card == False:
         print reader, "--> no card inserted"
         return False
     return card
-        
+
 def selectReader():
-    reader = False
+    reader = None
     list = getReadersList()
     if len(list) == 0:
         print "No reader has been found."
@@ -128,7 +128,7 @@ def selectFileByName(connection, name):
         hexName.append(ord(c))
     return selectFile(connection, hexName, 0x04)
 
-# TODO : On peut également avoir le nombre de records en prenant la taille totale (octets 2 et 3 ?) 
+# TODO : On peut également avoir le nombre de records en prenant la taille totale (octets 2 et 3 ?)
 def selectFile(connection, address, param1 = 0x00, param2 = 0x00):
     """selectionne un fichier"""
     global cla
@@ -137,12 +137,12 @@ def selectFile(connection, address, param1 = 0x00, param2 = 0x00):
     addressLen = len(address)
     apdu = [cla, ins, param1, param2, addressLen] + address
     response, sw1, sw2 = sendAPDU(connection, apdu)
-    
+
     if statusBadLength(sw1, sw2) and addressLen>2:  # On sélectionne les DF un par un
         for i in range(addressLen/2):
             apdu = [cla, ins, param1, param2, 2] + address[2*i:2*(i+1)]
             response, sw1, sw2 = sendAPDU(connection, apdu)
-        
+
     size = 0
     if statusHasResponse(sw1, sw2):
         size = findEFSize(connection, sw2)
@@ -150,8 +150,8 @@ def selectFile(connection, address, param1 = 0x00, param2 = 0x00):
             sw1 = 0x90
             sw2 = 0
     return response, sw1, sw2, size
-    
-    
+
+
 def readData(connection, size):
     global cla
     apdu = [cla, 0xb0, 0, 0, 0]
@@ -165,10 +165,10 @@ def readData(connection, size):
             elif good:
                 size -= 1
                 break
-        
+
     apdu = [cla, 0xb0, 0, 0, size]
     return sendAPDU(connection, apdu)
-    
+
 
 def readRecord(connection, number, length=0, mode = 0x04):
     """Lit un enregistrement dans un fichier selectionné."""
@@ -215,11 +215,11 @@ def statusRecordNotFound(sw1, sw2):
 def statusCommandNotAllowed(sw1, sw2):
     """retourne True ssi la commande est interdite."""
     return (sw1==0x69 and sw2==0x86)
-    
+
 def statusFileNotFound(sw1, sw2):
     """retourne True ssi les un fichier n'a pas été trouvé."""
     return (sw1==0x6a and sw2==0x82)
-    
+
 def statusWrongParameters(sw1, sw2):
     """retourne True ssi les paramètres ne sont pas corrects."""
     return (sw1==0x6a and sw2==0x86)
@@ -231,7 +231,7 @@ def statusBadLength(sw1, sw2):
 def statusBadLengthWithCorrection(sw1, sw2):
     """retourne True ssi on a demandé une mauvaise longueur de record et que la carte nous renvoie la bonne taille."""
     return sw1 == 0x6c
-    
+
 def statusHasResponse(sw1, sw2):
     """retourne True ssi il y a des informations à récupérer après un select"""
     return sw1 == 0x9f
