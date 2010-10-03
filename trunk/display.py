@@ -38,7 +38,7 @@ def printExchangeWithBinary(query, response, sw1, sw2):
     """Prints an APDU exchange (query-response) in hexadecimal, and
     the response in binary."""
     printExchange(query, response, sw1, sw2)
-    print "\t ==  ", toBinaryString(response)
+    print "\t ==  ", hexListToBinaryString(response)
 
 def readPIN():
     print "PIN code required, please enter it:"
@@ -62,7 +62,7 @@ def printAddress(address, space):
 
 def printRecord(response, nb):
     print "====  ", nb, "  ===="
-    print "\t", toBinaryString(response), "\n"
+    print "\t", hexListToBinaryString(response), "\n"
 
 
 # Main printing functions.

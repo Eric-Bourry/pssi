@@ -13,6 +13,7 @@ import bruteforce
 optionsList = [
     ("-a", "apdu mode, show the APDUs"),
     ("-b", "choose bruteforce mode"),
+    ("-c:", "specify the class byte for the bruteforce mode, in hexadecimal"),
     ("-d", "choose dump mode (default, specify a plugin)"),
     ("-h", "show this help"),
     ("-l", "choose loop mode (specify a plugin)"),
@@ -43,8 +44,6 @@ def main():
 
     mode = UsageMode.Dumper
 
-    # TODO(e): Faire une option pour spécifier le CLASS BYTE en
-    # paramètre dans le cas d'un BF
     for o, a in opts:
         if o == "-a":
             card_interface.apduMode = True
@@ -54,6 +53,8 @@ def main():
             display.verboseMode = True
         elif o == "-r":
             bruteforce.recursiveMode = True
+        elif o == "-c":
+            card_interface.cla = int(a, 16)
         elif o == "-b":
             mode = UsageMode.Bruteforce
         elif o == "-l":
@@ -62,25 +63,28 @@ def main():
             mode = UsageMode.Dumper
         else:
             assert False, "unhandled option: %s" % (o)
-
-    if len(args) < 1:
-        # TODO(e): Should be a different error
-        usage()
-
-    sys.path.append(args[0])
-    import plugin
-    card_interface.cla = plugin.getClassByte()
-
-    if mode == UsageMode.Dumper:
-        import dumper
-        dumper.startDump()
-
-    elif mode == UsageMode.Loop:
-        import loop
-        loop.startLoop()
-
-    elif mode == UsageMode.Bruteforce:
+            
+    if mode == UsageMode.Bruteforce:
         bruteforce.startBruteforce()
+
+    else:
+        if len(args) < 1:
+            print "--> You forgot to specify a plugin"
+            usage()
+
+        sys.path.append(args[0])
+        import plugin
+        card_interface.cla = plugin.getClassByte()
+
+        if mode == UsageMode.Dumper:
+            import dumper
+            dumper.startDump()
+
+        elif mode == UsageMode.Loop:
+            import loop
+            loop.startLoop()
+
+    
 
 
 if __name__ == '__main__':
