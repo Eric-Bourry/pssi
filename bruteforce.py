@@ -20,7 +20,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
            firstByteMax = 0xff, secondByteMin = 0, secondByteMax = 0xff):
 
     selectFileMode = 0x08
-    response, sw1, sw2 = selectFile(connection, [0,0], selectFileMode)
+    response, sw1, sw2, size = selectFile(connection, [0,0], selectFileMode)
     if statusWrongParameters(sw1, sw2):
         selectFileMode = 0x02
 
@@ -28,7 +28,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
     #    print space + ("0x%02x" % firstByte) + " 0xxx"
         for secondByte in range(secondByteMin, secondByteMax+1):
             address = startAddress + [firstByte, secondByte]
-            response, sw1, sw2 = selectFile(connection, address, selectFileMode)
+            response, sw1, sw2, size = selectFile(connection, address, selectFileMode)
 
             if not statusIsOK(sw1, sw2):
                 continue

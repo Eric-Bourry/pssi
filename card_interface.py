@@ -192,7 +192,7 @@ def readRecord(connection, number, length=0, mode = 0x04):
 '''
 def readRecordBinaryResponse(connection, number):
     response, sw1, sw2 = readRecord(connection, number)
-    return display.toBinaryString(response)
+    return display.hexListToBinaryString(response)
 '''
 
 
