@@ -39,7 +39,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
                 response, sw1, sw2 = readRecord(connection, recordNumber+1)
                 print "\t",
                 if statusIsOK(sw1, sw2):
-                    display.printRecord(response, recordNumber+1)
+                    display.printRecordInBinary(response, recordNumber+1)
                 else:
                     if statusSecurityNotOK(sw1, sw2):
                         print "Security status not satisfied\n"
@@ -55,7 +55,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
                         len = sw2
                         response, sw1, sw2 = readRecord(connection, recordNumber+1, sw2)
                         if statusIsOK(sw1, sw2):
-                            display.printRecord(response, recordNumber+1)
+                            display.printRecordInBinary(response, recordNumber+1)
                             print "\t(longueur %d)\n" % len
                     else:
                         print "Unknown error: %02x %02x\n" % (sw1, sw2)
