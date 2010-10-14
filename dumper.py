@@ -4,6 +4,8 @@
 # The dumper
 
 
+# Copyright © 2010 Eric Bourry & Julien Flaissy
+
 # This file is part of PSSI (Python Simple Smartcard Interpreter).
 
 # PSSI is free software: you can redistribute it and/or modify
