@@ -1,0 +1,25 @@
+#summary User Manual
+#labels Phase-Deploy,Phase-Implementation
+
+= Introduction =
+
+In this wiki page, you will find some indications about how to use PSSI and how to write your own plugin.
+
+
+= How to use the tool =
+
+= How to write a plugin =
+
+== Setting up the environment ==
+
+  * Make a clean directory
+  * Copy `final_types.py` from another plugin
+  * Write your `plugin.py`, with the following functions:
+    * _getClassByte_ 
+    * _getRootStructure_ 
+    * _getInterpretersTable_ 
+
+
+== Adding some strucures ==
+
+== Adding some interpreters ==
