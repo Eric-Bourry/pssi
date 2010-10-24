@@ -15,9 +15,9 @@ In this wiki page, you will find some indications about how to use PSSI and how 
   * Make a clean directory
   * Copy `final_types.py` from another plugin
   * Write your `plugin.py`, with the following functions:
-    * _getClassByte_ 
-    * _getRootStructure_ 
-    * _getInterpretersTable_ 
+    * _getClassByte_: This functions returns the class byte of your smart card, which is the first byte sent in every APDU.
+    * _getRootStructure_: This functions returns the root structure of your smartcard.
+    * _getInterpretersTable_: This functions returns the interpreters table, which makes a correspondance between a data type and an interpreting function. An interpreting function is used to convert raw data (bytes or bits) into meaningful and human readable information.
 
 
 == Adding some strucures ==
