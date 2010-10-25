@@ -22,15 +22,13 @@
 # along with PSSI.  If not, see <http://www.gnu.org/licenses/>
 
 
-
 from smartcard.System import readers
 from smartcard.Exceptions import NoCardException, CardConnectionException
 from smartcard.util import toHexString
 
-
 import sys
 import display
-from  card_interface import *
+from card_interface import *
 
 
 recursiveMode = False
@@ -38,7 +36,7 @@ recursiveMode = False
 
 def explore(connection, startAddress = [], space = "", firstByteMin = 0,
            firstByteMax = 0xff, secondByteMin = 0, secondByteMax = 0xff):
-
+    """"""
     selectFileMode = 0x08
     response, sw1, sw2, size = selectFile(connection, [0,0], selectFileMode)
     if statusWrongParameters(sw1, sw2):
@@ -52,7 +50,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
 
             if not statusIsOK(sw1, sw2):
                 continue
-            # Le select est bon, on regarde les enregistrements.
+            # selectFile was correct, now we read records.
             display.printAddress(address, space)
 
             for recordNumber in range(255):
@@ -63,7 +61,7 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
                 else:
                     if statusSecurityNotOK(sw1, sw2):
                         print "Security status not satisfied\n"
-                    elif statusCommandNotAllowed(sw1, sw2): # ie. c'est un DF
+                    elif statusCommandNotAllowed(sw1, sw2): # ie. it is a DF.
                         print "This is a DF\n"
                         if recursiveMode:
                             explore(connection, startAddress+address, space+"   ")
@@ -71,12 +69,13 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
                         # Record not found, it was the last one
                         print "Total: %u record(s)\n" % (recordNumber)
                     elif statusBadLength(sw1, sw2):
-                        # mauvaise longueur, on peut recuperer le coup.
-                        len = sw2
-                        response, sw1, sw2 = readRecord(connection, recordNumber+1, sw2)
+                        # Bad length, we try again with the correct value.
+                        length = sw2
+                        response, sw1, sw2 = readRecord(connection,
+                                                        recordNumber+1, sw2)
                         if statusIsOK(sw1, sw2):
                             display.printRecordInBinary(response, recordNumber+1)
-                            print "\t(longueur %d)\n" % len
+                            print "\t(longueur %d)\n" % length
                     else:
                         print "Unknown error: %02x %02x\n" % (sw1, sw2)
                     break
@@ -84,5 +83,5 @@ def explore(connection, startAddress = [], space = "", firstByteMin = 0,
 
 def startBruteforce():
     card = getCard()
-    if card:
+    if not card is None:
         explore(card, [], "", 0x00, 0x3f, 0x00, 0x80)

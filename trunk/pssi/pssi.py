@@ -32,7 +32,7 @@ import bruteforce
 optionsList = [
     ("-a", "apdu mode, show the APDUs"),
     ("-b", "choose bruteforce mode"),
-    ("-c:", "specify the class byte for the bruteforce mode, in hexadecimal"),
+    ("-c", "specify the class byte for the bruteforce mode, in hexadecimal"),
     ("-d", "choose dump mode (default, specify a plugin)"),
     ("-h", "show this help"),
     ("-l", "choose loop mode (specify a plugin)"),
@@ -81,14 +81,14 @@ def main():
         elif o == "-d":
             mode = UsageMode.Dumper
         else:
-            assert False, "unhandled option: %s" % (o)
-            
+            assert False, "unhandled option: %s" % o
+
     if mode == UsageMode.Bruteforce:
         bruteforce.startBruteforce()
 
     else:
         if len(args) < 1:
-            print "--> You forgot to specify a plugin"
+            print "--> You forgot to specify a plugin.\n"
             usage()
 
         sys.path.append(args[0])
@@ -102,8 +102,6 @@ def main():
         elif mode == UsageMode.Loop:
             import loop
             loop.startLoop()
-
-    
 
 
 if __name__ == '__main__':
