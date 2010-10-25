@@ -31,6 +31,6 @@ def startDump():
     """Launch the dumping process: parse the card and print the
     results."""
     card = card_interface.getCard()
-    if card:
+    if not card is None:
         content = structure_parser.parseCard(card)
         display.prettyPrint(content)

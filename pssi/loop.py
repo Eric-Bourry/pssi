@@ -40,7 +40,7 @@ import time
 class ReloadDump(exceptions.Exception):
     def __init__(self):
         return
-        
+
     def __str__(self):
         print ": ","There was an error during the dumping process"
 
@@ -53,13 +53,11 @@ def dumpCard(card):
     et fait un beep."""
     if not card_interface.connectToCard(card):
         return False
-
     Tkinter.Tk().bell()
     try:
         content = structure_parser.parseCard(card.connection)
     except CardConnectionException:
         return False
-
     card.connection.disconnect()
     Tkinter.Tk().bell()
     return content
@@ -94,7 +92,7 @@ class observer(CardObserver):
             startLoop()
         except:
             return
-                        
+
 
 def startLoop():
     now = datetime.datetime.today()
@@ -104,7 +102,6 @@ def startLoop():
     cardmonitor = CardMonitor()
     cardobserver = observer(directory)
     cardmonitor.addObserver(cardobserver)
-
     while True:
         try:
             time.sleep(60)

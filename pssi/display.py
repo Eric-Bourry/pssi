@@ -64,13 +64,14 @@ def printExchangeWithBinary(query, response, sw1, sw2):
     print "\t ==  ", hexListToBinaryString(response)
 
 def readPIN():
-    """Asks the user for his PIN code, and returns it as a sequence of 8 bytes"""
+    """Asks the user for his PIN code, and returns it as a sequence of 8 bytes."""
     print "PIN code required, please enter it:"
     code = raw_input('--> ')
     code = code[0:8]
     pin = []
     for c in code:
         pin.append(ord(c))
+    # Pad with 0xff if necessary.
     for i in range(len(code), 8):
         pin.append(0xff)
     return pin
@@ -78,15 +79,15 @@ def readPIN():
 def errorPIN():
     """Exits because of a wrong PIN code"""
     print "Error while verifying the PIN code"
-    sys.exit()
+    sys.exit(2)
 
 def printAddress(address, space):
-    """Prints some spaces followed by the relative part of an address"""
+    """Prints some spaces followed by the relative part of an address."""
     length = len(address)
     print space, "[0x%02x%02x]" % (address[length-2], address[length-1])
 
 def printRecordInBinary(response, nb):
-    """Prints the content of a record in binary, along with its index"""
+    """Prints the content of a record in binary, along with its index."""
     print "====  ", nb, "  ===="
     print "\t", hexListToBinaryString(response), "\n"
 
