@@ -32,7 +32,7 @@ import bruteforce
 optionsList = [
     ("-a", "apdu mode, show the APDUs"),
     ("-b", "choose bruteforce mode"),
-    ("-c", "specify the class byte for the bruteforce mode, in hexadecimal"),
+    ("-c:", "specify the class byte for the bruteforce mode, in hexadecimal"),
     ("-d", "choose dump mode (default, specify a plugin)"),
     ("-h", "show this help"),
     ("-l", "choose loop mode (specify a plugin)"),
