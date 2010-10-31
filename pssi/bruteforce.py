@@ -34,7 +34,7 @@ from card_interface import *
 recursiveMode = False
 
 
-def explore(connection, startAddress = [], space = "", firstByteMin = 0,
+def explore(connection, startAddress, space = "", firstByteMin = 0,
            firstByteMax = 0xff, secondByteMin = 0, secondByteMax = 0xff):
     """"""
     selectFileMode = 0x08
