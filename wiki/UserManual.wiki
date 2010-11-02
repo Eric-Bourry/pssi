@@ -42,7 +42,9 @@ For a DF, you use 4-tuples, each one containing:
   * The name of the element, which will be part of the final output
   * Its type, which is a member of the `FieldType` class
   * Its relative address, as a 2-byte-array
-  * The name of the Python structure detailing the contents of the element
+  * The name of the Python structure detailing the contents of the element. If the TLV (Tag-Length-Value) scheme must be used, this value is -1
+
+There is a special case, present in the EMV card for instance, where an EF can contain a series of structures, whose number and adresses are not known in advance. In this case, the type is `FieldType.DFList`, and, if the name of the Python structure is -1, a fifth member of the tuple can be defined, which specifies a default structure if no tag is found, or if the tag is not a key of the interpreting table.
 
 Here is an example:
 {{{
