@@ -27,7 +27,7 @@ Usage: pssi  `[`options`]` plugin
 == Setting up the environment ==
 
   * Make a clean directory
-  * Copy `final_types.py` from another plugin
+  * Copy the `FieldType` the structure (usually in `final_types.py`) from another plugin
   * Write your `plugin.py`, with the following functions:
     * _getClassByte_: This functions returns the class byte of your smart card, which is the first byte sent in every APDU.
     * _getRootStructure_: This functions returns the root structure of your smartcard.
@@ -53,4 +53,35 @@ structSIM = [
 ]
 }}}
 
+For an EF, you use 5-tuples, each one containing:
+  * The name of the element, which will be part of the final output
+  * Its type, which is a member of the `FieldType` class
+  * Its size, usually in bytes. If the element doesn't have a fixed size, this number can be negative; it then specifies the amount of data following the current element, which has to be fixed
+  * A comment, which will be part of the final output, in order to make it for user friendly. It can be empty
+  * The nature of the element, which allows PSSI to know how to interpret the element, as described in the next section
+
+Here is an example:
+{{{
+structNumber = [
+    ("Alpha identifier", FieldType.Final, -14, "Name of the contact", FinalType.Contact),
+    ("Length of relevant information", FieldType.Final, 1, "In bytes", FinalType.Integer),
+    ("TON and NPI", FieldType.Final, 1, "", FinalType.TonNpi),
+    ("Dialling number", FieldType.Final, 10, "Telephone number of the contact", FinalType.NumRevHexString),
+    ("Capability/Configuration identifier", FieldType.Final, 1, "", FinalType.Integer),
+    ("Extension1 record identifier", FieldType.Final, 1, "", FinalType.Integer),
+]
+}}}
+
 == Adding some interpreters ==
+
+As explained above, the interpreting table maps interpreting functions to types of elements.
+Sometimes, for EMV cards for instance, smartcards have their content encoded according to the TLV (Tag-Length-Value) scheme. In this case, it is possible to use the interpreting table to map interpreting functions to TLV tags.
+
+The interpreting table can also be used to define some hooks, by associating functions to the following strings (see the Navigo plugin for an example):
+  * "ANY" --> This hook is always executed after the interpretation of an element. It can be used to maintain global variables for instance. It takes four arguments:
+    * The name of the element
+    * Its interpretation
+    * Its type, which is the key in the interpreting table
+    * Its value, which is the raw information, before the interpretation
+  * "ATR" --> This is hook is used to parse the `pyscard` ATR structure, and should return a string describing it
+  * "FORMAT" --> This hook is executed before the interpretation of any element, in order to pre-format it. It takes an array of byte as an argument, and should return an object which can be parsed by the interpreting functions. FOr instance, it might be easier to deal with bit strings than with byte arrays, such as in the Navigo case.
