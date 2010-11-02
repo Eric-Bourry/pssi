@@ -8,6 +8,20 @@ In this wiki page, you will find some indications about how to use PSSI and how 
 
 = How to use the tool =
 
+In order to run PSSI, make sure `pyscard` and the `PSSI` packages are installed. You can then run `pssi.py`, without forgetting to specify a plugin, and read your smartcards!
+
+<pre>
+Usage: pssi  `[`options`]` plugin
+	-a        apdu mode, show the APDUs
+	-b        choose bruteforce mode
+	-c        specify the class byte for the bruteforce mode, in hexadecimal
+	-d        choose dump mode (default, specify a plugin)
+	-h        show this help
+	-l        choose loop mode (specify a plugin)
+	-r        enable recursive mode in the bruteforce mode
+	-v        verbose mode, show the raw data along with the interpretation
+</pre>
+
 = How to write a plugin =
 
 == Setting up the environment ==
@@ -21,5 +35,22 @@ In this wiki page, you will find some indications about how to use PSSI and how 
 
 
 == Adding some strucures ==
+
+A structure describes a file in the smartcard file hierarchy, by listing its elements. It consists of an array of tuples, whose number depends on wether you are describing a DF (Dedicated File), such as the MF (Master File), or an EF (Elementary file).
+
+For a DF, you use 4-tuples, each one containing:
+  * The name of the element, which will be part of the final output
+  * Its type, which is a member of the `FieldType` class
+  * Its relative address, as a 2-byte-array
+  * The name of the Python structure detailing the contents of the element
+
+Here is an example:
+{{{
+structSIM = [
+    ("ICC identification", FieldType.TransparentEF, [0x2f, 0xe2], structICC),
+    ("DF GSM", FieldType.DF, [0x7f, 0x20], structGSM),
+    ("DF Télécom", FieldType.DF, [0x7f, 0x10], structDFTel),
+]
+}}}
 
 == Adding some interpreters ==
