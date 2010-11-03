@@ -78,9 +78,7 @@ def interpretApplicationVersionNumber(value):
 
 # Outils generaux
 def matchWithCode(codes, value):
-    """Renvoie la valeur associée à un code.
-    `codes' est un dictionnaire, les clés sont les codes entiers,
-    `value' est une clé potentielle en binaire."""
+    # Returns the value associated with a code in a dictionary
     code = int(value, 2)
     if code in codes:
         res = codes[code]

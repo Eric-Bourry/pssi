@@ -64,7 +64,6 @@ structPLMNsel = [
 ]
 
 
-# TODO : valeur de N ?
 structHPLMN = [
     ("Home PLMN search period", FieldType.Final, 1, "Interval of time between searches for the HPLMN, in interger multiple of N minutes", FinalType.Integer),
 ]
@@ -112,14 +111,14 @@ structLOCI = [
     #("LAI", FieldType.Final, 5, "Location Area Information", FinalType.Integer),
     ("MCC", FieldType.Final, 2, "Mobile Country Code", FinalType.PLMNMCC),
     ("MNC", FieldType.Final, 1, "Mobile Network Code", FinalType.MNC),
-    ("LAC", FieldType.Final, 2, "", FinalType.HexString),   # TODO : C'est quoi ?
+    ("LAC", FieldType.Final, 2, "Location Area Code", FinalType.HexString),
     ("TMSI time", FieldType.Final, 1, "Current value of Periodic Location Updating Timer", FinalType.Integer),
     ("Location update status", FieldType.Final, 1, "", FinalType.LocationUpdateStatus),
 ]
 
 structAD = [
     ("MS operation mode", FieldType.Final, 1, "", FinalType.OperationMode),
-    # TODO : Incomplet ? Le reste des valeurs est manufacturer specific...
+    # The rest of this structure is manufacturer specific...
 ]
 
 structPhase = [
@@ -132,15 +131,14 @@ structGSM = [
     ("Kc", FieldType.TransparentEF, [0x6f, 0x20], structKc),
     ("PLMN selector", FieldType.TransparentEF, [0x6f, 0x30], structPLMNsel),
     ("HPLMN search period", FieldType.TransparentEF, [0x6f, 0x31], structHPLMN),
-    ("ACM max", FieldType.TransparentEF, [0x6f, 0x37], structACMmax), # TODO : a tester, je ne l'ai pas
-    # TODO : EFsst = sim service table
-    ("ACM", FieldType.TransparentEF, [0x6f, 0x39], structACM),  # TODO : a tester, je ne l'ai pas
+    ("ACM max", FieldType.TransparentEF, [0x6f, 0x37], structACMmax),
+    ("ACM", FieldType.TransparentEF, [0x6f, 0x39], structACM),
     ("Group Identifier level 1", FieldType.TransparentEF, [0x6f, 0x3e], structGID),
     ("Group Identifier level 2", FieldType.TransparentEF, [0x6f, 0x3f], structGID),
     ("SPN", FieldType.TransparentEF, [0x6f, 0x46], structSPN),
-    ("PUCT", FieldType.TransparentEF, [0x6f, 0x41], structPUCT), # TODO : Pas la bonne structure, je ne l'ai pas sur mon tel
+    ("PUCT", FieldType.TransparentEF, [0x6f, 0x41], structPUCT), # This might not be the good structure
     ("CBMI", FieldType.TransparentEF, [0x6f, 0x45], structCBMI),
-    ("BCCH", FieldType.TransparentEF, [0x6f, 0x74], structBCCH),  # TODO : page 260 de 0408_4n1.doc
+    ("BCCH", FieldType.TransparentEF, [0x6f, 0x74], structBCCH),
     ("ACC", FieldType.TransparentEF, [0x6f, 0x78], structACC),
     ("FPLMN", FieldType.TransparentEF, [0x6f, 0x7b], structForbiddenPLMN),
     ("Location information", FieldType.TransparentEF, [0x6f, 0x7e], structLOCI),
@@ -173,7 +171,6 @@ structSMS = [
     ("Sender TON and NPI", FieldType.Final, 1, "", FinalType.TonNpi),
     ("Sender number", FieldType.Final, fieldLength, "Telephone number of the sender", FinalType.NumRevHexString),
 
-    # TODO : Meilleure interprétation ?
     ("Protocol Identifier", FieldType.Final, 1, "", FinalType.Integer),
 
     ("Data Coding Scheme", FieldType.Final, 1, "", FinalType.DCS),
@@ -182,7 +179,7 @@ structSMS = [
     ("SMS", FieldType.Final, fieldLength, "", FinalType.SMS),
 ]
 
-# TODO : incomplet
+# Still incomplete
 structDFTel = [
     ("Abbreviated dialling numbers", FieldType.RecordEF, [0x6f, 0x3a], structNumber),
     ("Fixed dialling numbers", FieldType.RecordEF, [0x6f, 0x3b], structNumber),
