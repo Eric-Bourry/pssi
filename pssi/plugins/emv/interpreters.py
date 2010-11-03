@@ -154,9 +154,7 @@ interpretingFunctions = {
 
 # FIXME: devrait etre general ?
 def matchWithCode(codes, code):
-    """Renvoie la valeur associée à un code.
-    `codes' est un dictionnaire, les clés sont les codes entiers,
-    `value' est une clé potentielle en binaire."""
+    # Returns the value associated with a code in a dictionary
     if code in codes:
         res = codes[code]
     else:

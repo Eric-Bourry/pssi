@@ -26,7 +26,6 @@ import math
 from final_types import FinalType
 from codes import MCCs, MNCs
 
-# TODO : rendre les interpréteurs SAFE    
 
 mncBase = ""
 tonNPI = 0
@@ -75,7 +74,7 @@ def interpretIMSIMCC(value):
     code = 10*code + value[1]%16
     code = 10*code + (value[1]>>4)
     mncBase = str(code)+'-'
-    # TODO : Ça se passe comment si le MNC est à 3 chiffres ?
+    # Careful, MNC might be 3-digit-long
     return matchWithIntCode(MCCs, code)
     
     
@@ -83,7 +82,7 @@ def interpretPLMNMCC(value):
     global mncBase
     code = interpretRevHexString(value)
     mncBase = code[0:3]+'-'
-    if code[3] != 'f': # Le MNC est à 3 chiffres
+    if code[3] != 'f': # MNC is 3-digit-long
         mncBase += code[3]
     code = int(code[0:3])
     return matchWithIntCode(MCCs, code)
@@ -244,7 +243,7 @@ SRIs = {
     1: "With status report"
 }
 
-# TODO : Lequel est le bon ? Le premier est de moi, le deuxième de SIM Reader...
+
 def interpretSMSInfo(value):
     global smsHeader
     code = value[0]
@@ -259,21 +258,6 @@ def interpretSMSInfo(value):
     sri = matchWithIntCode(SRIs, (code>>5) % 2)
     return "Type: %s, %s, %s, %s, %s" % (mti, mms, rp, udhi, sri)
 
-'''
-def interpretSMSInfo(value):
-    code = value[0]
-    mti = matchWithIntCode(MTIs, (code >> 6) % 4)
-    mms = matchWithIntCode(MMSs, (code>>5) % 2)
-    rp = matchWithIntCode(RPs, (code>>2) % 2)
-    udhi = matchWithIntCode(UDHIs, (code>>3) % 2)
-    sri = matchWithIntCode(SRIs, (code>>4) % 2)
-    return "Type: %s, %s, %s, %s, %s" % (mti, mms, rp, udhi, sri)
-'''    
-'''
-def interpretNumberLength(value):
-    structures.numberLength[0] = value[0]
-    return interpretInteger(value)
-'''
 
 DCSs = {
     0: "7-bit default alphabet",
@@ -302,7 +286,6 @@ def interpretDCS(value):
     return matchWithIntCode(DCSs, newDCS)+txt
     
     
-# TODO : ordre d'affichage des infos ?
 def interpretTimeStamp(value):
     if value == [0xff]*len(value):
         return ""
@@ -411,7 +394,6 @@ interpretingFunctions = {
     FinalType.TonNpi: interpretTonNpi,
     FinalType.SMSStatus: interpretSMSStatus,
     FinalType.SMSInfo: interpretSMSInfo,
-   # FinalType.NumberLength: interpretNumberLength,
     FinalType.DCS: interpretDCS,
     FinalType.TimeStamp: interpretTimeStamp,
     FinalType.SMS: interpretSMS,
@@ -426,9 +408,7 @@ interpretingFunctions = {
 
 
 def matchWithIntCode(codes, code):
-    """Renvoie la valeur associée à un code.
-    `codes' est un dictionnaire, les clés sont les codes entiers,
-    `value' est une clé potentielle en binaire."""
+    # Returns the value associated with a code in a dictionary
     if code in codes:
         res = codes[code]
     else:
