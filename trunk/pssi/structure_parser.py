@@ -26,6 +26,7 @@
 import plugin
 import display
 from card_interface import *
+from field_types import FieldType
 
 from smartcard.util import toHexString
 from smartcard.ATR import ATR
@@ -34,20 +35,6 @@ import exceptions
 
 
 MAX_RECORDS = 10
-
-
-class FieldType:
-    DF = 0.1
-    RecordEF = 0.2
-    Bitmap = 0.3
-    Final = 0.4
-    Counter = 0.5
-    DFName = 0.6
-    DFList = 0.7
-    TransparentEF = 0.8
-    FinalRepeated = 0.9
-    StructRepeated = 0.01
-    ReversedStructRepeated = 0.02
 
 
 def interpretFinalField(value, type, name):

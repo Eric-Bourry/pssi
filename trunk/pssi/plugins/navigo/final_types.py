@@ -18,17 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with PSSI.  If not, see <http://www.gnu.org/licenses/>
 
-
-
-class FieldType:
-    DF = 0.1
-    RecordEF = 0.2
-    Bitmap = 0.3
-    Final = 0.4
-    Counter = 0.5
-    DFName = 0.6
-    DFList = 0.7
-
 class FinalType:
     Unknown = 0
     Date = 1

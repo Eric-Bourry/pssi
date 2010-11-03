@@ -184,7 +184,7 @@ def interpretRouteNumber(value):
     if globalValues["EventServiceProvider"].find("VEOLIA") != -1:
         return interpretInteger(value[0:8])
     elif "EventCode" in globalValues and globalValues["EventCode"].split()[0]=="Train" and int(value, 2)>16:
-        return "RER  "+chr(ord('A')+int(value,2)-17)    
+        return "RER  "+chr(ord('A')+int(value,2)-17)
     else:
         line = interpretInteger(value)
         if line == "103":
@@ -232,8 +232,8 @@ def interpretEventDevice(value):
         side = "gauche"
     res = "Porte %u, validateur de %s" % (door, side)
     return res
-    
-    
+
+
 def interpretHolderDataCardStatus(value):
     results = {
         1   : "Navigo découverte",
@@ -242,7 +242,7 @@ def interpretHolderDataCardStatus(value):
         14 : "Imagine R (étudiant)"
     }
     return matchWithCode(results, value)
-        
+
 
 def interpretUnknown(value):
     return value
@@ -274,10 +274,10 @@ def parseATR(atrStruct):
     atr["ROM"] =  "%02x" % (rom)
     eeprom = historicalBytes[7]
     atr["EEPROM"] =  "%02x" % (eeprom)
-    
+
     currentStructure = structures.cardTypes[atr["Chip type"] + atr["Application type"] + atr["Application subtype"]]
     atr["Card type"] = currentStructure[0]
-    
+
     atr["Keys"] = ["Card number", "Chip type", "Application type", "Application subtype", "Issuer", "ROM", "EEPROM", "Card type"]
     return atr
 
@@ -312,8 +312,8 @@ interpretingFunctions = {
     FinalType.Integer: interpretInteger,
 
     FinalType.Unknown: interpretUnknown,
-        
-        
+
+
     "ANY": updateGlobalFields,
     "ATR": parseATR,
     "FORMAT": hexListToBinaryString,
