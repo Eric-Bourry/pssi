@@ -26,7 +26,7 @@ import structures
 
 def getClassByte():
     return 0xA0
-	
+
 
 def getRootStructure():
     #return interpreters.currentStructure[1]

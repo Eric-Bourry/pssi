@@ -22,8 +22,8 @@
 # along with PSSI.  If not, see <http://www.gnu.org/licenses/>
 
 
-
-from final_types import FinalType, FieldType
+from field_types import FieldType
+from final_types import FinalType
 
 aidList = []
 
