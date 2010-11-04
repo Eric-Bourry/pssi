@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -- currencies.py
+# Defines the codes of the different currencies
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 

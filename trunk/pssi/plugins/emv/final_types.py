@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# -- final_types.py
+# Defines the data types
+
+# Mostly TLV
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
