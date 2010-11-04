@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# -- codes.py
+# Standard codes
+
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# -- plugin.py
+# Functions required by every plugin
+
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
@@ -29,16 +32,8 @@ def getClassByte():
 
 
 def getRootStructure():
-    #return interpreters.currentStructure[1]
     return structures.structSIM
-    #return []
 
-'''
-hihi = {
-    "ATR": parseATRhihi
-}
-'''
 
 def getInterpretersTable():
     return interpreters.interpretingFunctions
-    #return {}

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# -- interpreters.py
+# Defines the interpreters
+
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
