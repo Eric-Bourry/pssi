@@ -34,7 +34,7 @@ import types
 import exceptions
 
 
-MAX_RECORDS = 10
+MAX_RECORDS = 1000
 
 
 def interpretFinalField(value, type, name):
