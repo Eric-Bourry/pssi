@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# -- plugin.py
+# Functions required by every plugin
+
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
