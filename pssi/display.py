@@ -37,8 +37,7 @@ def formatOutput(interpretation, rawdata, comment):
         return "%-35s ---   %s (%s)" % (interpretation, rawdata, comment)
     return "%-35s (%s)" % (interpretation, comment)
 
-# TODO : également dans les interpréteurs ?
-# TODO : Faire des fonctions dispo aux interpréteurs, du genre matchWithCode
+
 def hexListToBinaryString(tab):
     """Returns a string containing the binary representation of `tab'."""
     s = ''
@@ -47,7 +46,7 @@ def hexListToBinaryString(tab):
         s = s + "%d" % (((tab[b/8] >> ((7-b)%8))) & 1)
     return s
 
-# TODO(m): nom pourri
+
 def printExchange(query, response, sw1, sw2):
     """Prints an APDU exchange (query-response)."""
     print ">> ",

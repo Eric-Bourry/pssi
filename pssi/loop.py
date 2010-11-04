@@ -44,13 +44,12 @@ class ReloadDump(exceptions.Exception):
     def __str__(self):
         print ": ","There was an error during the dumping process"
 
-
-dumped = [] # les cartes deja vues
+# remember which cards have already been seen
+dumped = [] 
 
 
 def dumpCard(card):
-    """Initie une connection à la carte, dumpe, se déconnecte
-    et fait un beep."""
+    ''' Connects to a card, dumps the data, disconnects, and produces a beep '''
     if not card_interface.connectToCard(card):
         return False
     Tkinter.Tk().bell()
@@ -64,13 +63,13 @@ def dumpCard(card):
 
 
 class observer(CardObserver):
-    """`directory' est le repertoire où on stocke les dumps."""
+    ''' `directory' is where the dumps are stored '''
     def __init__(self, directory):
         self.directory = directory
 
     def update(self, observable, (addedcards, removedcards)):
-        """Quand on detecte un carte, on dumpe puis on l'ecrit dans
-        le fichier `directory'/xx - ATR.txt"""
+        ''' When a card is detected, its content is dumped into a file named
+        `directory'/xx - ATR.txt'''
         try:
             for card in addedcards:
                 Tkinter.Tk().bell()
