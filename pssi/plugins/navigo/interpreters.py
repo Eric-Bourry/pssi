@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# -- interpreters.py
+# Defines the interpreters
+
+# Lots of things in french, because it is a french card
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
@@ -76,7 +80,7 @@ def interpretApplicationVersionNumber(value):
     res += " - v%u" % (int(value[3:],2))
     return res
 
-# Outils generaux
+
 def matchWithCode(codes, value):
     # Returns the value associated with a code in a dictionary
     code = int(value, 2)
@@ -184,12 +188,12 @@ def interpretRouteNumber(value):
     if globalValues["EventServiceProvider"].find("VEOLIA") != -1:
         return interpretInteger(value[0:8])
     elif "EventCode" in globalValues and globalValues["EventCode"].split()[0]=="Train" and int(value, 2)>16:
-        return "RER  "+chr(ord('A')+int(value,2)-17)
+        return "RER  "+chr(ord('A')+int(value,2)-17)    
     else:
         line = interpretInteger(value)
         if line == "103":
             return "Ligne 3 bis"
-        return "Ligne " + line # temporaire, mais plus lisible
+        return "Ligne " + line 
 
 
 def interpretLocationId(value):
@@ -201,7 +205,7 @@ def interpretLocationId(value):
     elif transport == "Train":
         table = trainStations
     elif transport == "Bus":
-        return interpretInteger(value) # temporaire
+        return interpretInteger(value) 
 
     else:
         return "L'interprétation des lieux n'est pas encore disponible pour le "+transport
@@ -232,8 +236,8 @@ def interpretEventDevice(value):
         side = "gauche"
     res = "Porte %u, validateur de %s" % (door, side)
     return res
-
-
+    
+    
 def interpretHolderDataCardStatus(value):
     results = {
         1   : "Navigo découverte",
@@ -242,13 +246,12 @@ def interpretHolderDataCardStatus(value):
         14 : "Imagine R (étudiant)"
     }
     return matchWithCode(results, value)
-
+        
 
 def interpretUnknown(value):
     return value
 
-# FIXME: ca sert à quoi ça déjà ?
-# 'type' et 'value' sont pas utilisés
+
 def updateGlobalFields(name, interpretation, type, value):
     if name in globalFields:
         globalValues[name] = interpretation
@@ -274,17 +277,16 @@ def parseATR(atrStruct):
     atr["ROM"] =  "%02x" % (rom)
     eeprom = historicalBytes[7]
     atr["EEPROM"] =  "%02x" % (eeprom)
-
+    
     currentStructure = structures.cardTypes[atr["Chip type"] + atr["Application type"] + atr["Application subtype"]]
     atr["Card type"] = currentStructure[0]
-
+    
     atr["Keys"] = ["Card number", "Chip type", "Application type", "Application subtype", "Issuer", "ROM", "EEPROM", "Card type"]
     return atr
 
 
 def hexListToBinaryString(tab):
     """retourne la chaine de la representation binaire de tab"""
-    #print "Format", tab
     s = ''
     blen = len(tab) * 8
     for b in range(0,blen):
@@ -312,8 +314,8 @@ interpretingFunctions = {
     FinalType.Integer: interpretInteger,
 
     FinalType.Unknown: interpretUnknown,
-
-
+        
+        
     "ANY": updateGlobalFields,
     "ATR": parseATR,
     "FORMAT": hexListToBinaryString,
