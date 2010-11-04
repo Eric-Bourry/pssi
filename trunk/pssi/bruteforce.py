@@ -43,7 +43,6 @@ def explore(connection, startAddress, space = "", firstByteMin = 0,
         selectFileMode = 0x02
 
     for firstByte in range(firstByteMin, firstByteMax+1):
-    #    print space + ("0x%02x" % firstByte) + " 0xxx"
         for secondByte in range(secondByteMin, secondByteMax+1):
             address = startAddress + [firstByte, secondByte]
             response, sw1, sw2, size = selectFile(connection, address, selectFileMode)

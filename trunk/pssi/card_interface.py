@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# card.py: interactions avec la carte
+# card.py:
+# functions to communicate with a smartcard
 
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
@@ -30,7 +31,7 @@ from smartcard.pcsc.PCSCExceptions import EstablishContextException
 
 import display
 
-# FIXME, ca devrait etre une var globale pour tous les py
+
 apduMode = False
 cla = 0
 lastRecordSize = 0
@@ -82,7 +83,6 @@ def establishConnection(connection):
 def connectToCard(card):
     try:
         card.connection = card.createConnection()
-        #card.connection.connect()
         establishConnection(card.connection)
         return True
     except (NoCardException, CardConnectionException):
@@ -91,7 +91,6 @@ def connectToCard(card):
 def connectCard(reader):
     try:
         connection = reader.createConnection()
-        #connection.connect()
         establishConnection(connection)
         return connection
     except (NoCardException, CardConnectionException):
@@ -146,18 +145,17 @@ def selectFileByName(connection, name):
         hexName.append(ord(c))
     return selectFile(connection, hexName, 0x04)
 
-# TODO : On peut également avoir le nombre de records en prenant la taille totale (octets 2 et 3 ?)
+
 def selectFile(connection, address, param1 = 0x00, param2 = 0x00):
     """Select a file."""
     global cla
     ins = 0xa4
-    # param1, param2 = 0x08, 0x00
     addressLen = len(address)
     apdu = [cla, ins, param1, param2, addressLen] + address
     response, sw1, sw2 = sendAPDU(connection, apdu)
 
-    # On sélectionne les DF un par un
-    # TODO(e). J: il se passe quoi ici?
+    # If we didn't manage to select a file directly with its whole address,
+    # we try to do it DF by DF
     if statusBadLength(sw1, sw2) and addressLen > 2:
         for i in range(addressLen/2):
             apdu = [cla, ins, param1, param2, 2] + address[2*i:2*(i+1)]
@@ -191,7 +189,7 @@ def readData(connection, size):
 
 
 def readRecord(connection, number, length=0, mode = 0x04):
-    """Lit un enregistrement dans un fichier selectionné."""
+    """Reads a record in a selected EF"""
     global cla, lastRecordSize
     ins = 0xb2
     if length == 0:
@@ -208,12 +206,6 @@ def readRecord(connection, number, length=0, mode = 0x04):
     else:
         lastRecordSize = length
     return response, sw1, sw2
-
-'''
-def readRecordBinaryResponse(connection, number):
-    response, sw1, sw2 = readRecord(connection, number)
-    return display.hexListToBinaryString(response)
-'''
 
 
 def getATR(connection):
