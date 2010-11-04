@@ -272,5 +272,4 @@ listOfStructs = [
     ("Special Event List", structSpecialEventList)
 ]
 
-#defaultNavigoStructure = structCD97
 defaultNavigoStructure = ("GTML",structGTML)
