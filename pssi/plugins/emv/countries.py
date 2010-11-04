@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -- countries.py
+# Defines the country codes
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 

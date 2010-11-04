@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -- interpreters.py
+# Defines the interpreters
 
 # Copyright © 2010 Eric Bourry & Julien Flaissy
 
@@ -152,7 +154,6 @@ interpretingFunctions = {
     FinalType.Unknown: interpretUnknown,
     }
 
-# FIXME: devrait etre general ?
 def matchWithCode(codes, code):
     # Returns the value associated with a code in a dictionary
     if code in codes:
