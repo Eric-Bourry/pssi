@@ -27,7 +27,6 @@ Usage: pssi  `[`options`]` plugin
 == Setting up the environment ==
 
   * Make a clean directory
-  * Copy the `FieldType` the structure (usually in `final_types.py`) from another plugin
   * Write your `plugin.py`, with the following functions:
     * _getClassByte_: This functions returns the class byte of your smart card, which is the first byte sent in every APDU.
     * _getRootStructure_: This functions returns the root structure of your smartcard.
