@@ -159,5 +159,5 @@ def matchWithCode(codes, code):
     if code in codes:
         res = codes[code]
     else:
-        res = "Inconnu"
+        res = "Unknown --> %s" % (code)
     return res
