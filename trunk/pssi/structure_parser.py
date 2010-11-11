@@ -78,7 +78,7 @@ def parseTLV(data):
         # when the length is between 127 and 255 bytes, it is coded on two bytes. 
         # The first byte has a constant hexadecimal value ‘81’, while the second byte 
         # is the actual length in hexadecimal.
-        if data[0] == 0x81 and len(data)>0: 
+        if len(data)>0 and data[0] == 0x81: 
             data = data[1:]
             
         try:
