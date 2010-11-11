@@ -77,7 +77,7 @@ def interpretIMSIMCC(value):
     code = 10*code + value[1]%16
     code = 10*code + (value[1]>>4)
     mncBase = str(code)+'-'
-    # Careful, MNC might be 3-digit-long
+    # Careful, MNC might be 3 digits long
     return matchWithIntCode(MCCs, code)
     
     
@@ -85,10 +85,12 @@ def interpretPLMNMCC(value):
     global mncBase
     code = interpretRevHexString(value)
     mncBase = code[0:3]+'-'
-    if code[3] != 'f': # MNC is 3-digit-long
+    if code[3] != 'f': # MNC is 3 digits long
         mncBase += code[3]
-    code = int(code[0:3])
-    return matchWithIntCode(MCCs, code)
+    try:
+        code = int(code[0:3])
+    finally:
+        return matchWithIntCode(MCCs, code)
     
     
 def interpretMNC(value):
@@ -415,6 +417,6 @@ def matchWithIntCode(codes, code):
     if code in codes:
         res = codes[code]
     else:
-        res = "Inconnu --> %s" % (code)
+        res = "Unknown --> %s" % (code)
     return res
 

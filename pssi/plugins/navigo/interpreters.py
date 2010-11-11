@@ -87,7 +87,7 @@ def matchWithCode(codes, value):
     if code in codes:
         res = codes[code]
     else:
-        res = "Inconnu"
+        res = "Unknown --> %s" % (code)
     return res
 
 def interpretInteger(value):
