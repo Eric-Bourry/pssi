@@ -105,6 +105,8 @@ transactionTypes = {
     
     
 def interpretTransactionType(value):
+    if not value:
+        return "Unknown"
     code = value[0]
     return matchWithCode(transactionTypes, code)
 
