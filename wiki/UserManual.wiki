@@ -11,16 +11,22 @@ In this wiki page, you will find some indications about how to use PSSI and how 
 In order to run PSSI, make sure `pyscard` and the `PSSI` packages are installed. You can then run `pssi.py`, without forgetting to specify a plugin, and read your smartcards!
 
 <pre>
-Usage: pssi  `[`options`]` plugin
-	-a        apdu mode, show the APDUs
-	-b        choose bruteforce mode
-	-c        specify the class byte for the bruteforce mode, in hexadecimal
-	-d        choose dump mode (default, specify a plugin)
-	-h        show this help
-	-l        choose loop mode (specify a plugin)
-	-r        enable recursive mode in the bruteforce mode
-	-v        verbose mode, show the raw data along with the interpretation
+    Usage: pssi  `[`options`]` plugin_path
+    Example: ./pssi.py plugins/sim
+   	    -a        apdu mode, show the APDUs
+	    -b        choose bruteforce mode
+	    -c        specify the class byte for the bruteforce mode, in hexadecimal
+	    -d        choose dump mode (default, specify a plugin)
+	    -h        show this help
+	    -l        choose loop mode (specify a plugin)
+	    -r        enable recursive mode in the bruteforce mode
+	    -v        verbose mode, show the raw data along with the interpretation
 </pre>
+
+Here are some examples:
+  * $ ./pssi.py plugins/emv
+  * $ ./pssi.py plugins/navigo
+  * $ ./pssi.py plugins/sim
 
 = How to write a plugin =
 
