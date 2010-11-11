@@ -86,7 +86,7 @@ structSPN = [
 ]
 
 structPUCT = [
-    ("Cuurency code", FieldType.Final, 3, "", FinalType.Integer),
+    ("Currency code", FieldType.Final, 3, "", FinalType.Integer),
     ("PPU", FieldType.Final, 2, "Price per unit", FinalType.Integer),
 ]
 
