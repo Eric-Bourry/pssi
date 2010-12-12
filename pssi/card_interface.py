@@ -152,7 +152,6 @@ def selectFile(connection, address, param1 = 0x08, param2 = 0x00):
     ins = 0xa4
     addressLen = len(address)
     apdu = [cla, ins, param1, param2, addressLen] + address
-    print toHexString(apdu)
     response, sw1, sw2 = sendAPDU(connection, apdu)
 
     # If we didn't manage to select a file directly with its whole address,
@@ -166,7 +165,6 @@ def selectFile(connection, address, param1 = 0x08, param2 = 0x00):
                 # We have the correct DF, now select the EF
                 param1 = 0x02
             apdu = [cla, ins, param1, param2, 2] + address[2*i:2*(i+1)]
-            print toHexString(apdu)
             response, sw1, sw2 = sendAPDU(connection, apdu)
 
     size = 0
