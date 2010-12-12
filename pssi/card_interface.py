@@ -146,19 +146,27 @@ def selectFileByName(connection, name):
     return selectFile(connection, hexName, 0x04)
 
 
-def selectFile(connection, address, param1 = 0x00, param2 = 0x00):
+def selectFile(connection, address, param1 = 0x08, param2 = 0x00):
     """Select a file."""
     global cla
     ins = 0xa4
     addressLen = len(address)
     apdu = [cla, ins, param1, param2, addressLen] + address
+    print toHexString(apdu)
     response, sw1, sw2 = sendAPDU(connection, apdu)
 
     # If we didn't manage to select a file directly with its whole address,
     # we try to do it DF by DF
     if statusBadLength(sw1, sw2) and addressLen > 2:
-        for i in range(addressLen/2):
+        numberOfRequests = addressLen / 2
+        # first select the right DF
+        param1 = 0x01
+        for i in range(numberOfRequests):
+            if i == numberOfRequests-1:
+                # We have the correct DF, now select the EF
+                param1 = 0x02
             apdu = [cla, ins, param1, param2, 2] + address[2*i:2*(i+1)]
+            print toHexString(apdu)
             response, sw1, sw2 = sendAPDU(connection, apdu)
 
     size = 0
