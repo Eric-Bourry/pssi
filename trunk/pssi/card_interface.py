@@ -35,6 +35,7 @@ import display
 apduMode = False
 cla = 0
 lastRecordSize = 0
+selectFileP2 = -1
 
 
 def getReadersList():
@@ -146,13 +147,24 @@ def selectFileByName(connection, name):
     return selectFile(connection, hexName, 0x04)
 
 
-def selectFile(connection, address, param1 = 0x08, param2 = 0x00):
+def selectFile(connection, address, param1 = 0x08, param2 = -1):
     """Select a file."""
-    global cla
+    global cla, selectFileP2
     ins = 0xa4
+    if param2 == -1:
+        if selectFileP2 >= 0:
+            param2 = selectFileP2
+        else:
+            param2 = 0
     addressLen = len(address)
     apdu = [cla, ins, param1, param2, addressLen] + address
     response, sw1, sw2 = sendAPDU(connection, apdu)
+    
+    # If a parameter is incorrect, we try with P2=0xC
+    # (RFU in ISO 7816)
+    if statusWrongParameters(sw1, sw2):
+        return selectFile(connection, address, param1, 0x0c)
+        
 
     # If we didn't manage to select a file directly with its whole address,
     # we try to do it DF by DF
@@ -173,6 +185,8 @@ def selectFile(connection, address, param1 = 0x08, param2 = 0x00):
         if size != 0:
             sw1 = 0x90
             sw2 = 0
+    if statusIsOK(sw1, sw2):
+        selectFileP2 = param2
     return response, sw1, sw2, size
 
 
