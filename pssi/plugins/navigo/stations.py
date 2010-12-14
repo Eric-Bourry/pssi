@@ -208,7 +208,7 @@ metroStations = {
     "17-08": ["PASSY"],
     "17-09": ["RANELAGH"],
     "17-11": ["MUETTE (LA)"],
-    "17-13": ["RUE"],
+    "17-13": ["RUE DE LA POMPE"],
     "17-14": ["BOISSIERE"],
     "17-15": ["TROCADERO"],
     "18-01": ["IENA"],
