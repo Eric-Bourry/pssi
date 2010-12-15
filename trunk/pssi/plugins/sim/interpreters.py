@@ -211,7 +211,7 @@ def interpretTonNpi(value):
 SMSStatuses = {
     0: "Free space",
     1: "Message received and read",
-    3: "MEssage received but not read yet",
+    3: "Message received but not read yet",
     5: "Message sent",
     7: "Message to be sent"    
 }
