@@ -192,8 +192,11 @@ def selectFile(connection, address, param1 = 0x08, param2 = -1):
 
 def readData(connection, size):
     global cla
-    apdu = [cla, 0xb0, 0, 0, 0]
-    if size == 0:
+    apdu = [cla, 0xb0, 0, 0, size]
+    response, sw1, sw2 = sendAPDU(connection, apdu)
+    if statusBadLengthWithCorrection(sw1, sw2):
+        return readData(connection, sw2)
+    elif size == 0:
         good = False
         for size in range(0xff):
             apdu[4] = size
@@ -203,9 +206,9 @@ def readData(connection, size):
             elif good:
                 size -= 1
                 break
-
-    apdu = [cla, 0xb0, 0, 0, size]
-    return sendAPDU(connection, apdu)
+        apdu = [cla, 0xb0, 0, 0, size]
+        return sendAPDU(connection, apdu)
+    return response, sw1, sw2
 
 
 def readRecord(connection, number, length=0, mode = 0x04):
@@ -217,13 +220,12 @@ def readRecord(connection, number, length=0, mode = 0x04):
     apdu = [cla, ins, number, mode, length]
     response, sw1, sw2 = sendAPDU(connection, apdu)
     if statusBadLengthWithCorrection(sw1, sw2):
-        apdu[4] = sw2
-        response, sw1, sw2 = sendAPDU(connection, apdu)
+        return readRecord(connection, number, sw2, mode)
     elif statusBadLength(sw1, sw2):
         if length == 1:
             length = 0x100
-        response, sw1, sw2 = readRecord(connection, number, length-1, mode)
-    else:
+        return readRecord(connection, number, length-1, mode)
+    elif statusIsOK:
         lastRecordSize = length
     return response, sw1, sw2
 
