@@ -34,4 +34,5 @@ class FieldType:
     FinalRepeated = 0.9
     StructRepeated = 0.01
     ReversedStructRepeated = 0.02
+    FinalWithHeader = 0.03
 
