@@ -127,7 +127,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
             while mode != -1:
                 entry = {}
                 subkeys = []
-                for number in range(1, MAX_RECORDS):
+                for number in range(1, MAX_RECORDS+1):
                     cardData, sw1, sw2 = readRecord(connection, number, 0, mode)
                     if len(cardData)>0:
                         try:
@@ -252,7 +252,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         else:
                             entry = {}
                         subkeys = []
-                        for number in range(1, MAX_RECORDS):
+                        for number in range(1, MAX_RECORDS+1):
                             cardData, sw1, sw2 = readRecord(connection, number, size)
                             if len(cardData) > 0:
                                 if cardData == [0xff]*len(cardData):
@@ -294,8 +294,17 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         subkeys.append(number)
                         data = data[size[0]:]
                     entry["Keys"] = subkeys
-                elif field[1] == FieldType.Final:
-                    length = field[2]
+                elif field[1] == FieldType.Final or field[1] == FieldType.FinalWithHeader:
+                    if field[1] == FieldType.Final:
+                        length = field[2]
+                        description = field[3]
+                        finalType = field[4]
+                    elif field[1] == FieldType.FinalWithHeader:
+                        headerLength = field[2]
+                        header = data[0:headerLength]
+                        length = header[field[3]]
+                        description = field[4]
+                        finalType = field[5]
                     if type(length) is types.ListType:
                         length = length[0]
                     if length != 0:
@@ -305,12 +314,11 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     else:
                         value = data
                         data = []
-                        total += len(value)
-                   
-                    interpretation = interpretFinalField(value, field[4], name)
+                        total += len(value)                   
+                    interpretation = interpretFinalField(value, finalType, name)
                     if type(value) is types.ListType:
                         value = toHexString(value)
-                    entry = display.formatOutput(interpretation, value, field[3])
+                    entry = display.formatOutput(interpretation, value, description)
 
                 if hiddenFields:
                     counter = 0
