@@ -211,6 +211,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
 
 
             else:
+                entry = None
                 if field[1] == FieldType.DF:
                     entry = parseCardStruct(connection, field[3], data+field[2])
                 elif field[1] == FieldType.DFName:
