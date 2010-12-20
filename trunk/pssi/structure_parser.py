@@ -312,24 +312,27 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         value = data[0:length]
                         data = data[length:]
                         total += length
-                    else:
+                    elif field[1] == FieldType.Final:
                         value = data
                         data = []
-                        total += len(value)                   
-                    interpretation = interpretFinalField(value, finalType, name)
-                    if type(value) is types.ListType:
-                        value = toHexString(value)
-                    entry = display.formatOutput(interpretation, value, description)
+                        total += len(value)       
+                    
+                    if value is not None:
+                        interpretation = interpretFinalField(value, finalType, name)
+                        if type(value) is types.ListType:
+                            value = toHexString(value)
+                        entry = display.formatOutput(interpretation, value, description)
 
-                if hiddenFields:
-                    counter = 0
-                    for subname in name:
-                        table[subname] = entry[counter]
-                        keys.append(subname)
-                        counter += 1
-                else:
-                    table[name] = entry
-                    keys.append(name)
+                if entry is not None:
+                    if hiddenFields:
+                        counter = 0
+                        for subname in name:
+                            table[subname] = entry[counter]
+                            keys.append(subname)
+                            counter += 1
+                    else:
+                        table[name] = entry
+                        keys.append(name)
 
     sizeParsed.append(total)
     table["Keys"] = keys
