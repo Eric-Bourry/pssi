@@ -302,6 +302,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     elif field[1] == FieldType.FinalWithHeader:
                         headerLength = field[2]
                         header = data[0:headerLength]
+                        data = data[headerLength:]
                         length = header[field[3]]
                         description = field[4]
                         finalType = field[5]
