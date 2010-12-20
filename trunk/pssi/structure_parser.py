@@ -295,6 +295,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         data = data[size[0]:]
                     entry["Keys"] = subkeys
                 elif field[1] == FieldType.Final or field[1] == FieldType.FinalWithHeader:
+                    value = None
                     if field[1] == FieldType.Final:
                         length = field[2]
                         description = field[3]
