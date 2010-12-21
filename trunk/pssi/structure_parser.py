@@ -324,6 +324,8 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         if type(value) is types.ListType:
                             value = toHexString(value)
                         entry = display.formatOutput(interpretation, value, description)
+                    else:
+                        entry = display.formatOutput("", "", description)
 
                 if entry is not None:
                     if hiddenFields:
