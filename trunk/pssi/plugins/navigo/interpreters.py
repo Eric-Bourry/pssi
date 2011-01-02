@@ -137,7 +137,7 @@ def interpretSpecialEventSeriousness(value):
     codes = { 0 : "Aucune sévérité",
           1 : "Événement d’information",
           2 : "Événement de mise en garde",
-          3 : "Évènement relatif à une faute" }
+          3 : "Événement relatif à une faute" }
     return matchWithCode(codes, value)
 
 def interpretEventCode(value):
