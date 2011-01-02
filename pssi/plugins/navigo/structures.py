@@ -98,7 +98,7 @@ structEvent = [
         ("EventCode", FieldType.Final, 8, "Nature de l’événement", FinalType.EventCode),
         ("EventResult", FieldType.Final, 8, "Code Résultat", FinalType.EventResult),
         ("EventServiceProvider", FieldType.Final, 8, "Identité de l’exploitant", FinalType.EventServiceProvider),
-        ("EventNotokCounter", FieldType.Final, 8, "Compteur évènements anormaux", FinalType.Unknown),
+        ("EventNotokCounter", FieldType.Final, 8, "Compteur événements anormaux", FinalType.Unknown),
         ("EventSerialNumber", FieldType.Final, 24, "Numéro de série de l’événement", FinalType.Unknown),
         ("EventDestination", FieldType.Final, 16, "Destination de l’usager", FinalType.Unknown),
         ("EventLocationId", FieldType.Final, 16, "Lieu de l’événement", FinalType.LocationId),
