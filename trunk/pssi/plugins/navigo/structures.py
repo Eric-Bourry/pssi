@@ -260,6 +260,7 @@ structCD97 = [
 cardTypes = {
     "080303": ("GTML", structGTML),
     "080304": ("GTML2", structGTML),
+    "281142": ("GTML2", structGTML),
     "0a0103": ("CD97", structCD97)
 }
 
