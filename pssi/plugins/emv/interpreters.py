@@ -96,7 +96,11 @@ def interpretHexString(value):
     for c in value:
         txt += "%02x " % c
     return txt
-    
+
+
+def interpretDoubleHexString(value):
+    return ''.join('%02x%02x ' % (value[i],value[i+1]) for i in range(0, len(value), 2))
+
     
 transactionTypes = {
     0:  "Payment",
@@ -115,7 +119,7 @@ interpretingFunctions = {
     0x4f:   ("Application ID", interpretAID),
     0x50:   ("Application name", interpretString),
     0x57:   ("Track 2 data", interpretHexString),
-    0x5a:   ("Card number", interpretHexString),
+    0x5a:   ("Card number", interpretDoubleHexString),
     0x61:   ("EMV Application information", -1),
     0x70:   ("Application information", -1),
     0x84:   ("DF name", interpretString),
