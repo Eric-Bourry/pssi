@@ -173,13 +173,13 @@ structContract = [
             ("ContractValidityDuration", FieldType.Final, 8,"Durée de validité", FinalType.Unknown),
             ("ContractValidityLimiteDate", FieldType.Final, 14,"Date limite de première utilisation", FinalType.Date),
             ("ContractValidityZones", FieldType.Final, 8,"Numéros des zones autorisées", FinalType.Zones),
-            ("ContractValidityJourneys", FieldType.Final, 16,"Nombre de voyages autorisés", FinalType.Unknown),
+            ("ContractValidityJourneys", FieldType.Final, 16,"Nombre de voyages autorisés", FinalType.Integer),
             ("ContractPeriodJourneys", FieldType.Final, 16,"Nombre de voyages autorisés par période", FinalType.Unknown)
         ]),
         ("ContractJourneyData", FieldType.Bitmap, 8,
         [
-            ("ContractJourneyOrigin", FieldType.Final, 16,"Code lieu d’origine", FinalType.Unknown),
-            ("ContractJourneyDestination", FieldType.Final, 16,"Code lieu de destination", FinalType.Unknown),
+            ("ContractJourneyOrigin", FieldType.Final, 16,"Code lieu d’origine", FinalType.TrainStationId),
+            ("ContractJourneyDestination", FieldType.Final, 16,"Code lieu de destination", FinalType.TrainStationId),
             ("ContractJourneyRouteNumbers", FieldType.Final, 16 ,"Numéros des lignes autorisées", FinalType.Unknown),
             ("ContractJourneyRouteVariants", FieldType.Final, 8,"Variantes aux numéros des lignes autorisées", FinalType.Unknown),
             ("ContractJourneyRun", FieldType.Final, 16 ,"Référence du voyage", FinalType.Unknown),

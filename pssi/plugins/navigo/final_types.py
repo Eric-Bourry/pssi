@@ -37,5 +37,6 @@ class FinalType:
     EventResult = 12
     RouteNumber = 13
     LocationId = 14
-    EventDevice = 15
-    HolderDataCardStatus = 16
+    TrainStationId = 15
+    EventDevice = 16
+    HolderDataCardStatus = 17

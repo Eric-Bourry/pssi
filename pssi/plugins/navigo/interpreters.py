@@ -205,11 +205,18 @@ def interpretLocationId(value):
     elif transport == "Train":
         table = trainStations
     elif transport == "Bus":
-        return interpretInteger(value) 
-
+        return interpretInteger(value)
     else:
         return "L'interprétation des lieux n'est pas encore disponible pour le "+transport
 
+    return parseLocationId(value, table)
+
+
+def interpretTrainStationId(value):
+    return parseLocationId(value, trainStations)
+
+
+def parseLocationId(value, table):
     zone = int(value[0:7], 2)
     location = int(value[7:12], 2)
     code = "%02u-%02u" % (zone, location)
@@ -308,6 +315,7 @@ interpretingFunctions = {
     FinalType.EventResult: interpretEventResult,
     FinalType.RouteNumber: interpretRouteNumber,
     FinalType.LocationId: interpretLocationId,
+    FinalType.TrainStationId: interpretTrainStationId,
     FinalType.EventDevice: interpretEventDevice,
     FinalType.HolderDataCardStatus: interpretHolderDataCardStatus,
 
