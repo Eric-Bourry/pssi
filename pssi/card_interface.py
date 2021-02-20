@@ -103,7 +103,7 @@ def getCard():
         return None
     card = connectCard(reader)
     if card is None:
-        print reader, "--> No card inserted."
+        print(reader, "--> No card inserted.")
     return card
 
 def selectReader():
@@ -111,19 +111,19 @@ def selectReader():
     reader = None
     reader_list = getReadersList()
     if len(reader_list) == 0:
-        print "No reader has been found."
+        print("No reader has been found.")
     elif len(reader_list) == 1:
         reader = reader_list[0]
     else:
         i = 1
         for reader in reader_list:
-            print "%u: %s" % (i, reader)
+            print("%u: %s" % (i, reader))
             i += 1
-        choice = raw_input("\nWhich reader do you want to use? ")
+        choice = input("\nWhich reader do you want to use? ")
         try:
             reader = reader_list[int(choice)-1]
         except:
-            print "Please type a correct number"
+            print("Please type a correct number")
     return reader
 
 

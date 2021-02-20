@@ -54,19 +54,19 @@ def explore(connection, startAddress, space = "", firstByteMin = 0,
 
             for recordNumber in range(255):
                 response, sw1, sw2 = readRecord(connection, recordNumber+1)
-                print "\t",
+                print("\t", end=' ')
                 if statusIsOK(sw1, sw2):
                     display.printRecordInBinary(response, recordNumber+1)
                 else:
                     if statusSecurityNotOK(sw1, sw2):
-                        print "Security status not satisfied\n"
+                        print("Security status not satisfied\n")
                     elif statusCommandNotAllowed(sw1, sw2): # ie. it is a DF.
-                        print "This is a DF\n"
+                        print("This is a DF\n")
                         if recursiveMode:
                             explore(connection, startAddress+address, space+"   ")
                     elif statusRecordNotFound(sw1, sw2):
                         # Record not found, it was the last one
-                        print "Total: %u record(s)\n" % (recordNumber)
+                        print("Total: %u record(s)\n" % (recordNumber))
                     elif statusBadLength(sw1, sw2):
                         # Bad length, we try again with the correct value.
                         length = sw2
@@ -74,9 +74,9 @@ def explore(connection, startAddress, space = "", firstByteMin = 0,
                                                         recordNumber+1, sw2)
                         if statusIsOK(sw1, sw2):
                             display.printRecordInBinary(response, recordNumber+1)
-                            print "\t(longueur %d)\n" % length
+                            print("\t(longueur %d)\n" % length)
                     else:
-                        print "Unknown error: %02x %02x\n" % (sw1, sw2)
+                        print("Unknown error: %02x %02x\n" % (sw1, sw2))
                     break
 
 

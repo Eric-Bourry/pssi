@@ -31,7 +31,6 @@ from field_types import FieldType
 from smartcard.util import toHexString
 from smartcard.ATR import ATR
 import types
-import exceptions
 
 
 MAX_RECORDS = 1000
@@ -45,21 +44,21 @@ def interpretFinalField(value, type, name):
     return interpretation
 
 
-class IncorrectStructure(exceptions.Exception):
+class IncorrectStructure():
     def __init__(self):
         return
 
     def __str__(self):
-        print ": ","Tried to parse a binary string with an incorrect structure"
+        print(": ","Tried to parse a binary string with an incorrect structure")
 
 
-class notTLVRecord(exceptions.Exception):
+class notTLVRecord(BaseException):
     def __init__(self, data):
         self.data = data
         return
 
     def __str__(self):
-        print ": ","The following record isn't in the TLV format: ", data
+        print(": ","The following record isn't in the TLV format: ", data)
 
 
 def parseTLV(data):
@@ -148,14 +147,14 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
         else:
             field = structure[0]
             name = field[0]
-            if type(name) == types.ListType:
+            if type(name) == list:
                 hiddenFields = True
             else:
                 hiddenFields = False
             structure = structure[1:]
 
             if field[1] == FieldType.Bitmap:
-                if not (type(data) is types.StringType):
+                if not (type(data) is bytes):
                     data = display.hexListToBinaryString(data)
                 for bit in data:
                     if bit != '0' and bit != '1':
@@ -181,7 +180,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 length = field[2]
                 datalen = len(data)
                 subfields = []
-                for i in range(datalen/length):
+                for i in range(int(datalen/length)):
                     if data[i*length: (i+1)*length] == [0xff]*length:
                         break
                     subfields.append( ("%s %u" % (field[0], i+1), FieldType.Final, field[2], field[3], field[4]) )
@@ -204,7 +203,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 length = field[2]
                 datalen = len(data)
                 newdata = []
-                for i in reversed(range(datalen/length)):
+                for i in reversed(list(range(datalen/length))):
                     newdata += data[i*length: (i+1)*length]
                 data = newdata
                 structure = [(field[0], FieldType.StructRepeated, field[2], field[3])] + structure
@@ -281,7 +280,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                 elif field[1] == FieldType.Counter:
                     length = field[2]
                     
-                    if type(data) is types.StringType:
+                    if type(data) is bytes:
                         counter = int(data[0:length], 2)
                     else:
                         counter = data[0] 
@@ -308,7 +307,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                         length = header[field[3]]
                         description = field[4]
                         finalType = field[5]
-                    if type(length) is types.ListType:
+                    if type(length) is list:
                         length = length[0]
                     if length != 0:
                         value = data[0:length]
@@ -321,7 +320,7 @@ def parseCardStruct(connection, structure, data=[], sizeParsed=[], defaultStruct
                     
                     if value is not None:
                         interpretation = interpretFinalField(value, finalType, name)
-                        if type(value) is types.ListType:
+                        if type(value) is list:
                             value = toHexString(value)
                         entry = display.formatOutput(interpretation, value, description)
                     else:
