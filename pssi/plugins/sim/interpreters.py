@@ -312,7 +312,7 @@ def interpretTimeStamp(value):
     return "%s/%s/%s - %sh%sm%ss  GMT%s%u" % (day, month, year, hour, minute, second, sign, izone)
     
     
-ascii7 = u"@£$¥èéùìòÇ\nØø\rÅå∆_ΦΓΛΩΠΨΣΘΞ\x1bæÆßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà"
+ascii7 = "@£$¥èéùìòÇ\nØø\rÅå∆_ΦΓΛΩΠΨΣΘΞ\x1bæÆßÉ !\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà"
 
 
 def interpretASCII7SMS(sms):

@@ -59,7 +59,7 @@ def interpretTime(value):
 def interpretZones(value):
     length = len(value)
     res = ""
-    for i in reversed(range(length)):
+    for i in reversed(list(range(length))):
         if value[i]=='1':
             res += "%u," % (length-i)
     res = res[0:len(res)-1]

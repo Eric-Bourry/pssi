@@ -30,19 +30,18 @@ from smartcard.util import toHexString
 
 import structure_parser
 import card_interface
-import Tkinter
+import tkinter
 import os
 import datetime
-import exceptions
 import display
 import time
 
-class ReloadDump(exceptions.Exception):
+class ReloadDump():
     def __init__(self):
         return
 
     def __str__(self):
-        print ": ","There was an error during the dumping process"
+        print(": ","There was an error during the dumping process")
 
 # remember which cards have already been seen
 dumped = [] 
@@ -52,13 +51,13 @@ def dumpCard(card):
     ''' Connects to a card, dumps the data, disconnects, and produces a beep '''
     if not card_interface.connectToCard(card):
         return False
-    Tkinter.Tk().bell()
+    tkinter.Tk().bell()
     try:
         content = structure_parser.parseCard(card.connection)
     except CardConnectionException:
         return False
     card.connection.disconnect()
-    Tkinter.Tk().bell()
+    tkinter.Tk().bell()
     return content
 
 
@@ -67,12 +66,13 @@ class observer(CardObserver):
     def __init__(self, directory):
         self.directory = directory
 
-    def update(self, observable, (addedcards, removedcards)):
+    def update(self, observable, xxx_todo_changeme):
         ''' When a card is detected, its content is dumped into a file named
         `directory'/xx - ATR.txt'''
+        (addedcards, removedcards) = xxx_todo_changeme
         try:
             for card in addedcards:
-                Tkinter.Tk().bell()
+                tkinter.Tk().bell()
                 if not card.atr in dumped:
                     content = dumpCard(card)
                     if content:
@@ -80,11 +80,11 @@ class observer(CardObserver):
                         filename = "%s%s%02u - %s.txt" % \
                                                 (self.directory, os.sep, len(dumped),
                                                  toHexString(card.atr))
-                        print filename,
+                        print(filename, end=' ')
                         file = open(filename, 'w')
                         display.prettyPrintToFile(content, file)
                         file.close()
-                        print ": OK."
+                        print(": OK.")
                     else:
                         raise ReloadDump
         except ReloadDump:

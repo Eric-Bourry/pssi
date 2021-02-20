@@ -46,10 +46,10 @@ class UsageMode:
     Loop = 2
 
 def usage():
-    print "Usage: pssi [options] plugin_path"
-    print "Example: ./pssi.py plugins/sim"
+    print("Usage: pssi [options] plugin_path")
+    print("Example: ./pssi.py plugins/sim")
     for opt, desc in sorted(optionsList):
-        print "\t%-10s%s" % (opt, desc)
+        print(("\t%-10s%s" % (opt, desc)))
     sys.exit(2)
 
 
@@ -58,8 +58,8 @@ def main():
     options = ''.join([o[1:] for o, d in optionsList])
     try:
         opts, args = getopt.getopt(sys.argv[1:], options)
-    except getopt.GetoptError, err:
-        print str(err)
+    except getopt.GetoptError as err:
+        print((str(err)))
         usage()
 
     mode = UsageMode.Dumper
@@ -89,14 +89,14 @@ def main():
 
     else:
         if len(args) < 1:
-            print "--> You forgot to specify a plugin.\n"
+            print("--> You forgot to specify a plugin.\n")
             usage()
 
         sys.path.append(args[0])
         try:
             import plugin
         except ImportError:
-            print "--> The plugin '%s' cannot be found" % args[0]
+            print(("--> The plugin '%s' cannot be found" % args[0]))
             usage()
         card_interface.cla = plugin.getClassByte()
 

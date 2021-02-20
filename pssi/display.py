@@ -43,29 +43,29 @@ def hexListToBinaryString(tab):
     s = ''
     blen = len(tab) * 8
     for b in range(0, blen):
-        s = s + "%d" % (((tab[b/8] >> ((7-b)%8))) & 1)
+        s = s + "%d" % (((tab[b >> 3] >> ((7-b)%8))) & 1)
     return s
 
 
 def printExchange(query, response, sw1, sw2):
     """Prints an APDU exchange (query-response)."""
-    print ">> ",
-    if type(query) is types.ListType:
-         print toHexString(query)
+    print(">> ", end=' ')
+    if type(query) is list:
+         print(toHexString(query))
     else:
-        print query
-    print "<< ", toHexString(response), " / ", "%x %x" % (sw1, sw2)
+        print(query)
+    print("<< ", toHexString(response), " / ", "%x %x" % (sw1, sw2))
 
 def printExchangeWithBinary(query, response, sw1, sw2):
     """Prints an APDU exchange (query-response) in hexadecimal, and
     the response in binary."""
     printExchange(query, response, sw1, sw2)
-    print "\t ==  ", hexListToBinaryString(response)
+    print("\t ==  ", hexListToBinaryString(response))
 
 def readPIN():
     """Asks the user for his PIN code, and returns it as a sequence of 8 bytes."""
-    print "PIN code required, please enter it:"
-    code = raw_input('--> ')
+    print("PIN code required, please enter it:")
+    code = input('--> ')
     code = code[0:8]
     pin = []
     for c in code:
@@ -77,40 +77,40 @@ def readPIN():
 
 def errorPIN():
     """Exits because of a wrong PIN code"""
-    print "Error while verifying the PIN code"
+    print("Error while verifying the PIN code")
     sys.exit(2)
 
 def printAddress(address, space):
     """Prints some spaces followed by the relative part of an address."""
     length = len(address)
-    print space, "[0x%02x%02x]" % (address[length-2], address[length-1])
+    print(space, "[0x%02x%02x]" % (address[length-2], address[length-1]))
 
 def printRecordInBinary(response, nb):
     """Prints the content of a record in binary, along with its index."""
-    print "====  ", nb, "  ===="
-    print "\t", hexListToBinaryString(response), "\n"
+    print("====  ", nb, "  ====")
+    print("\t", hexListToBinaryString(response), "\n")
 
 
 def prettyPrint(data, tabs=""):
     """Pretty print to standard output."""
-    if type(data) is types.DictType:
+    if type(data) is dict:
         for key in data["Keys"]:
-            print
-            if type(key) is types.StringType:
-                print tabs, ("%-27s" % key),
+            print()
+            if type(key) is bytes:
+                print(tabs, ("%-27s" % key), end=' ')
                 prettyPrint(data[key], tabs + "   ")
             else:
-                print tabs, "====  ", key, "  ====",
+                print(tabs, "====  ", key, "  ====", end=' ')
                 prettyPrint(data[key], tabs + "   ")
     else:
-        print ": " + data,
+        print(": " + data, end=' ')
 
 def prettyPrintToFile(data, output_file, tabs=""):
     """Pretty print to `output_file' (handle)."""
-    if type(data) is types.DictType:
+    if type(data) is dict:
         for key in data["Keys"]:
             output_file.write("\n")
-            if type(key) is types.StringType:
+            if type(key) is bytes:
                 output_file.write("%s%-27s" % (tabs, key))
                 prettyPrintToFile(data[key], output_file, tabs+"   ")
             else:
