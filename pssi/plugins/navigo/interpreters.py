@@ -166,10 +166,11 @@ def interpretEventCode(value):
 def interpretEventServiceProvider(value):
     """Champ : EventServiceProvider. Pas de table. (p27)"""
     providers = { 2 : "SNCF",
-              3 : "RATP",
-            115: "CSO (VEOLIA)",
-            116: "R'Bus (VEOLIA)",
-              156 : "Phébus" }
+                  3 : "RATP",
+                 115: "CSO (VEOLIA)",
+                 116: "R'Bus (VEOLIA)",
+                 156 : "Phébus",
+                 175 : "RATP (exploitation Veolia Transport Nanterre)" }
     return matchWithCode(providers, value)
 
 def interpretEventResult(value):
@@ -193,6 +194,8 @@ def interpretRouteNumber(value):
         line = interpretInteger(value)
         if line == "103":
             return "Ligne 3 bis"
+        if line == "17158":
+            return "Ligne 467"
         return "Ligne " + line 
 
 
